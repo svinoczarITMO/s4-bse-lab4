@@ -1,0 +1,7 @@
+/src/main/resources/hibernate.cfg.xml
+/.idea/
+/.gradle/
+/build/
+*.iml
+.DS_Store
+/lib/
