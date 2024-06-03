@@ -2,9 +2,9 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import aca98b.web3lv2.beans.BeanOfElements;
-import aca98b.web3lv2.beans.XBean;
-import aca98b.web3lv2.beans.YBean;
-import aca98b.web3lv2.beans.RBean;
+import aca98b.web3lv2.beans.fields.XBean;
+import aca98b.web3lv2.beans.fields.YBean;
+import aca98b.web3lv2.beans.fields.RBean;
 
 public class BeanOfElementsTest {
 

@@ -1,4 +1,4 @@
-package aca98b.web3lv2.beans;
+package aca98b.web3lv2.beans.fields;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.enterprise.context.SessionScoped;

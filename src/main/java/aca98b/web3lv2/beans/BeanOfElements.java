@@ -3,6 +3,10 @@ package aca98b.web3lv2.beans;
 import aca98b.web3lv2.AreaCheck;
 import aca98b.web3lv2.HibernateElement;
 import aca98b.web3lv2.HibernateUtil;
+import aca98b.web3lv2.beans.fields.OneElement;
+import aca98b.web3lv2.beans.fields.RBean;
+import aca98b.web3lv2.beans.fields.XBean;
+import aca98b.web3lv2.beans.fields.YBean;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
@@ -19,7 +23,6 @@ import java.util.stream.Collectors;
 import jakarta.inject.Inject;
 import jakarta.faces.validator.ValidatorException;
 import jakarta.inject.Named;
-import org.hibernate.HibernateError;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
@@ -194,6 +197,10 @@ public class BeanOfElements implements Serializable {
             e.printStackTrace();
         }
         return resultToken;
+    }
+
+    public List<OneElement> getListOfElements(){
+        return listOfElements;
     }
 
 }

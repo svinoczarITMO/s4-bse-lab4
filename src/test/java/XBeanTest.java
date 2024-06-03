@@ -1,6 +1,6 @@
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import aca98b.web3lv2.beans.XBean;
+import aca98b.web3lv2.beans.fields.XBean;
 
 public class XBeanTest {
 

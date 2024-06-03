@@ -1,6 +1,6 @@
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
-import aca98b.web3lv2.beans.RBean;
+import aca98b.web3lv2.beans.fields.RBean;
 
 public class RBeanTest {
 
