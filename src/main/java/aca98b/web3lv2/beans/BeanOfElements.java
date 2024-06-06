@@ -3,10 +3,7 @@ package aca98b.web3lv2.beans;
 import aca98b.web3lv2.AreaCheck;
 import aca98b.web3lv2.HibernateElement;
 import aca98b.web3lv2.HibernateUtil;
-import aca98b.web3lv2.beans.fields.OneElement;
-import aca98b.web3lv2.beans.fields.RBean;
-import aca98b.web3lv2.beans.fields.XBean;
-import aca98b.web3lv2.beans.fields.YBean;
+import aca98b.web3lv2.mBeans.Counter;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
@@ -32,6 +29,8 @@ import java.security.KeyPair;
 import java.security.KeyPairGenerator;
 import java.security.NoSuchAlgorithmException;
 
+import java.lang.management.ManagementFactory;
+import javax.management.*;
 
 @Named
 @SessionScoped
@@ -54,6 +53,19 @@ public class BeanOfElements implements Serializable {
     private Float maxX = 5f;
     private Float minY = -3f;
     private Float maxY = 5f;
+
+    private static Counter counter;
+
+    static {
+        try {
+            MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
+            ObjectName counter = new ObjectName("mbeans:type=Counter");
+            BeanOfElements.counter = new Counter();
+            mbs.registerMBean(BeanOfElements.counter, counter);
+        } catch (MalformedObjectNameException | NotCompliantMBeanException | InstanceAlreadyExistsException | MBeanRegistrationException e) {
+            e.printStackTrace();
+        }
+    }
 
 
     public BeanOfElements() {
@@ -164,6 +176,7 @@ public class BeanOfElements implements Serializable {
 
             session.getTransaction().commit();
         }
+        counter.clear();
     }
 
     public void safetyAdd(OneElement el) {
@@ -172,7 +185,8 @@ public class BeanOfElements implements Serializable {
             listOfElements.add(el);
             try {
                 saveDB(el);
-            } catch (HibernateException e) { // Используем HibernateException вместо HibernateError
+                counter.addHit(el);
+            } catch (HibernateException e) {
                 listOfElements.removeIf(element -> Objects.equals(element.getUtoken(), token));
                 FacesMessage message = new FacesMessage("Ошибка при сохранении в БД");
                 throw new ValidatorException(message);
@@ -197,10 +211,6 @@ public class BeanOfElements implements Serializable {
             e.printStackTrace();
         }
         return resultToken;
-    }
-
-    public List<OneElement> getListOfElements(){
-        return listOfElements;
     }
 
 }
