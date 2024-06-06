@@ -15,25 +15,13 @@ import java.lang.management.ManagementFactory;
 public class RBean implements Serializable {
 
     private String value;
-    private static Timer timerMBean;
 
-    static {
-        try {
-            MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
-            ObjectName area = new ObjectName("mbeans:type=Timer");
-            timerMBean = new Timer();
-            mbs.registerMBean(timerMBean, area);
-        } catch (MalformedObjectNameException | NotCompliantMBeanException | InstanceAlreadyExistsException | MBeanRegistrationException e) {
-            e.printStackTrace();
-        }
-    }
     public String getValue() {
         return value;
     }
 
     public void setValue(String value) {
         this.value = value;
-        timerMBean.calculateFigureArea(value);
     }
 
     public void rChecker(FacesContext fC, UIComponent uC, Object val) {

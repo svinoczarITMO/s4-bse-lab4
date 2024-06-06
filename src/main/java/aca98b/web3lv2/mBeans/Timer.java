@@ -1,18 +1,36 @@
 package aca98b.web3lv2.mBeans;
 
-public class Timer implements TimerMBean {
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.IntStream;
 
-    private float figureArea = 0;
+public class Timer implements TimerMBean {
+    private ArrayList<Long> hitTimeMillis = new ArrayList<>();
+    private double avgTimeInterval = 0;
+
 
     @Override
-    public void calculateFigureArea(String rValue) {
-        float r = Float.parseFloat(rValue);
-        figureArea = (r * r / 2) + (r / 2 * r) + (3.14f * r * r / 4);
-        System.out.println(figureArea);
+    public void setNewHitTime(long hitTime) {
+        hitTimeMillis.add(hitTime);
+        setAverageIntervalBetweenHits();
     }
 
     @Override
-    public float getFigureArea() {
-        return figureArea;
+    public void setAverageIntervalBetweenHits() {
+        avgTimeInterval = IntStream.range(0, hitTimeMillis.size() - 1)
+                .mapToDouble(i -> (hitTimeMillis.get(i + 1) - hitTimeMillis.get(i)) / 1000d)
+                .average()
+                .orElse(0);;
+    }
+
+    @Override
+    public double getAverageIntervalBetweenHits() {
+        return avgTimeInterval;
+    }
+
+    public void clear(){
+        hitTimeMillis.clear();
+        avgTimeInterval = 0;
     }
 }

@@ -4,6 +4,7 @@ import aca98b.web3lv2.AreaCheck;
 import aca98b.web3lv2.HibernateElement;
 import aca98b.web3lv2.HibernateUtil;
 import aca98b.web3lv2.mBeans.Counter;
+import aca98b.web3lv2.mBeans.Timer;
 import jakarta.enterprise.context.SessionScoped;
 import jakarta.faces.application.FacesMessage;
 import jakarta.faces.context.FacesContext;
@@ -54,14 +55,27 @@ public class BeanOfElements implements Serializable {
     private Float minY = -3f;
     private Float maxY = 5f;
 
-    private static Counter counter;
+    private static Counter counterMBean;
+    private static Timer timerMBean;
+
 
     static {
         try {
             MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
             ObjectName counter = new ObjectName("mbeans:type=Counter");
-            BeanOfElements.counter = new Counter();
-            mbs.registerMBean(BeanOfElements.counter, counter);
+            BeanOfElements.counterMBean = new Counter();
+            mbs.registerMBean(BeanOfElements.counterMBean, counter);
+        } catch (MalformedObjectNameException | NotCompliantMBeanException | InstanceAlreadyExistsException | MBeanRegistrationException e) {
+            e.printStackTrace();
+        }
+    }
+
+    static {
+        try {
+            MBeanServer mbs = ManagementFactory.getPlatformMBeanServer();
+            ObjectName area = new ObjectName("mbeans:type=Timer");
+            timerMBean = new Timer();
+            mbs.registerMBean(timerMBean, area);
         } catch (MalformedObjectNameException | NotCompliantMBeanException | InstanceAlreadyExistsException | MBeanRegistrationException e) {
             e.printStackTrace();
         }
@@ -176,7 +190,8 @@ public class BeanOfElements implements Serializable {
 
             session.getTransaction().commit();
         }
-        counter.clear();
+        counterMBean.clear();
+        timerMBean.clear();
     }
 
     public void safetyAdd(OneElement el) {
@@ -185,7 +200,8 @@ public class BeanOfElements implements Serializable {
             listOfElements.add(el);
             try {
                 saveDB(el);
-                counter.addHit(el);
+                counterMBean.addHit(el);
+                timerMBean.setNewHitTime(System.currentTimeMillis());
             } catch (HibernateException e) {
                 listOfElements.removeIf(element -> Objects.equals(element.getUtoken(), token));
                 FacesMessage message = new FacesMessage("Ошибка при сохранении в БД");
